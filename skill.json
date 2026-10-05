@@ -1,0 +1,59 @@
+{
+  "name": "genpark-agentic-webhook-signature-verifier-skill",
+  "version": "1.0.0",
+  "description": "Universal Agentic Webhook Signature Verifier & Ingress Multiplexer. Authenticates multi-provider webhooks (Shopify, Stripe, GitHub, Slack, PayPal) with HMAC-SHA256 constant-time verification, timestamp replay window validation, and multiplexed agent event dispatch.",
+  "tools": [
+    {
+      "name": "verify_and_route_webhook",
+      "description": "Verify webhook signature authenticity (HMAC-SHA256), prevent replay attacks with timestamp windows, and route verified event payloads to designated subagents.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "action": {
+            "type": "string",
+            "enum": [
+              "verify_and_route_webhook",
+              "compute_test_signature",
+              "get_verifier_stats"
+            ],
+            "description": "Webhook verification action."
+          },
+          "provider": {
+            "type": "string",
+            "enum": [
+              "SHOPIFY",
+              "STRIPE",
+              "GITHUB",
+              "SLACK",
+              "GENERIC_HMAC"
+            ],
+            "description": "Webhook provider format."
+          },
+          "raw_payload": {
+            "type": "string",
+            "description": "Raw HTTP request body string."
+          },
+          "signature_header": {
+            "type": "string",
+            "description": "Header signature value (e.g. Stripe-Signature, X-Shopify-Hmac-Sha256)."
+          },
+          "secret_key": {
+            "type": "string",
+            "description": "Shared webhook secret key."
+          },
+          "timestamp_header": {
+            "type": "string",
+            "description": "Optional timestamp string from header for replay check."
+          },
+          "tolerance_seconds": {
+            "type": "integer",
+            "description": "Allowed timestamp drift in seconds (default 300)."
+          }
+        },
+        "required": [
+          "action"
+        ]
+      }
+    }
+  ]
+}
